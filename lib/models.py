@@ -10,47 +10,45 @@ metadata = MetaData(naming_convention=convention)
 
 Base = declarative_base(metadata=metadata)
 
+
 class Company(Base):
-    __tablename__ = 'companies'
+    __tablename__ = "companies"
 
     id = Column(Integer(), primary_key=True)
     name = Column(String())
     founding_year = Column(Integer())
 
-    freebies = relationship('Freebie', backref='company')
-    devs = association_proxy('freebies', 'dev',
-            creator=lambda dev: Freebie(dev))
+    freebies = relationship("Freebie", backref="company")
+    devs = association_proxy("freebies", "dev", creator=lambda dev: Freebie(dev=dev))
 
     def __repr__(self):
-        return f'<Company {self.name}>'
+        return f"<Company {self.name}>"
+
 
 class Dev(Base):
-    __tablename__ = 'devs'
+    __tablename__ = "devs"
 
     id = Column(Integer(), primary_key=True)
-    name= Column(String())
+    name = Column(String())
 
-    freebies = relationship('Freebie', backref='devs')
-    companies = association_proxy('freebies', 'company',
-                creator=lambda comp: Freebie(company=comp))
+    freebies = relationship("Freebie", backref="dev")
+    companies = association_proxy(
+        "freebies", "company", creator=lambda comp: Freebie(company=comp)
+    )
 
     def __repr__(self):
-        return f'<Dev {self.name}>'
+        return f"<Dev {self.name}>"
+
 
 class Freebie(Base):
-    __tablename__ = 'freebies'
+    __tablename__ = "freebies"
 
     id = Column(Integer(), primary_key=True)
     item_name = Column(String())
     value = Column(Integer())
 
-    dev_id = Column(Integer(), ForeignKey('devs.id'))
-    company_id = Column(Integer(), ForeignKey('companies.id'))
+    dev_id = Column(Integer(), ForeignKey("devs.id"))
+    company_id = Column(Integer(), ForeignKey("companies.id"))
 
     def __repr__(self):
-        return f'Freebie {self.item_name}'
-
-
-
-
-
+        return f"Freebie {self.item_name}"

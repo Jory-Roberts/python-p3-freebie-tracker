@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 
 # Script goes here!
+import random
 from faker import Faker
 from random import random as rc
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import random
 from models import Company, Dev, Freebie
 
 engine = create_engine("sqlite:///freebies.db")
@@ -54,7 +54,7 @@ def create_companies():
         company = Company(name=random.choice(company_name), founding_year=fake.year())
         session.add(company)
         session.commit()
-        session.append(company)
+        companies.append(company)
     return companies
 
 
@@ -64,27 +64,28 @@ def create_devs():
         dev = Dev(name=fake.name())
         session.add(dev)
         session.commit()
-        session.append(dev)
+        devs.append(dev)
     return devs
 
 
 def create_freebies():
     freebies = []
     for i in range(100):
-        freebie = Freebie(item_name=random.choice(item), value=random.int(0, 50))
+        freebie = Freebie(item_name=random.choice(item), value=random.randint(1, 60))
         session.add(freebie)
         session.commit()
-        session.append(freebie)
+        freebies.append(freebie)
     return freebies
 
 
 def relate_one_to_many(companies, devs, freebies):
     for freebie in freebies:
-        freebie.dev = rc(devs)
-        freebie.company = rc(companies)
+        freebie.dev = random.choice(devs)
+        freebie.company = random.choice(companies)
 
-    session.add_all(companies)
+    session.add_all(freebies)
     session.commit()
+    return companies, devs, freebies
 
 
 if __name__ == "__main__":
