@@ -51,4 +51,4 @@ class Freebie(Base):
     company_id = Column(Integer(), ForeignKey("companies.id"))
 
     def __repr__(self):
-        return f"Freebie {self.item_name}"
+        return f"<Freebie {self.item_name}>"
