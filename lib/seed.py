@@ -71,7 +71,7 @@ def create_devs():
 def create_freebies():
     freebies = []
     for i in range(100):
-        freebie = Freebie(item_name=random.choice(item), value=random.randint(1, 60))
+        freebie = Freebie(item_name=random.choice(item), value=random.randint(0, 60))
         session.add(freebie)
         session.commit()
         freebies.append(freebie)
